@@ -52,4 +52,5 @@ int main(int argc,char* argv[])
     write(fd, str, 2);
   }
   close(fd);
+  exit();
 }
