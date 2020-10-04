@@ -192,10 +192,68 @@ void
 consoleintr(int (*getc)(void))
 {
   int c, doprocdump = 0;
-
+  char cpy[INPUT_BUF];
+  char cpy2[INPUT_BUF];
   acquire(&cons.lock);
   while((c = getc()) >= 0){
+    int j = 0;
     switch(c){
+    case C('C'):
+      j = 0;
+      for(int i = 0; i < INPUT_BUF; i++)
+      {
+        cpy[i] = '^';
+        cpy2[i] = '^';
+      }
+      int x = input.e;
+      while(input.e != input.w &&
+            input.buf[(input.e-1) % INPUT_BUF] != '\n'){
+        cpy2[j] = input.buf[(input.e - 1) % INPUT_BUF];
+        input.e--;
+        j++;
+      }
+      input.e = x;
+      for(int i = 0; cpy2[i] != '^'; i++){
+        cpy[j - 1 - i] = cpy2[i];
+      }
+      break;
+    case C('X'):  // Process listing.
+        // procdump() locks cons.lock indirectly; invoke later
+      j = 0;
+      for(int i = 0; i < INPUT_BUF; i++)
+      {
+        cpy[i] = '^';
+        cpy2[i] = '^';
+      }
+      while(input.e != input.w &&
+            input.buf[(input.e-1) % INPUT_BUF] != '\n'){
+        cpy2[j] = input.buf[(input.e - 1) % INPUT_BUF];
+        input.e--;
+        j++;
+        consputc(BACKSPACE);
+      }
+      for(int i = 0; cpy2[i] != '^'; i++){
+        cpy[j - 1 - i] = cpy2[i];
+      }
+      break;
+    case C('V'):  // Process listing.
+        // procdump() locks cons.lock indirectly; invoke later
+      for(int i = 0; cpy[i] != '^'; i++){
+        input.buf[input.e++ % INPUT_BUF] = cpy[i];
+        consputc(cpy[i]);
+      }
+      break;
+    case C('B'):
+      while(input.e != input.w &&
+            input.buf[(input.e-1) % INPUT_BUF] != '\n'){
+        input.e--;
+        consputc(BACKSPACE);
+      }
+      for(int i = 0; cpy[i] != '^'; i++){
+        input.buf[input.e++ % INPUT_BUF] = cpy[i];
+        consputc(cpy[i]);
+      }
+      break;
     case C('P'):  // Process listing.
       // procdump() locks cons.lock indirectly; invoke later
       doprocdump = 1;
@@ -296,4 +354,3 @@ consoleinit(void)
 
   ioapicenable(IRQ_KBD, 0);
 }
-
