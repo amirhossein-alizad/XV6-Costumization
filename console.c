@@ -202,8 +202,8 @@ consoleintr(int (*getc)(void))
       j = 0;
       for(int i = 0; i < INPUT_BUF; i++)
       {
-        cpy[i] = '^';
-        cpy2[i] = '^';
+        cpy[i] = '\0';
+        cpy2[i] = '\0';
       }
       int x = input.e;
       while(input.e != input.w &&
@@ -213,17 +213,16 @@ consoleintr(int (*getc)(void))
         j++;
       }
       input.e = x;
-      for(int i = 0; cpy2[i] != '^'; i++){
+      for(int i = 0; cpy2[i] != '\0'; i++){
         cpy[j - 1 - i] = cpy2[i];
       }
       break;
-    case C('X'):  // Process listing.
-        // procdump() locks cons.lock indirectly; invoke later
+    case C('X'):
       j = 0;
       for(int i = 0; i < INPUT_BUF; i++)
       {
-        cpy[i] = '^';
-        cpy2[i] = '^';
+        cpy[i] = '\0';
+        cpy2[i] = '\0';
       }
       while(input.e != input.w &&
             input.buf[(input.e-1) % INPUT_BUF] != '\n'){
@@ -232,13 +231,12 @@ consoleintr(int (*getc)(void))
         j++;
         consputc(BACKSPACE);
       }
-      for(int i = 0; cpy2[i] != '^'; i++){
+      for(int i = 0; cpy2[i] != '\0'; i++){
         cpy[j - 1 - i] = cpy2[i];
       }
       break;
-    case C('V'):  // Process listing.
-        // procdump() locks cons.lock indirectly; invoke later
-      for(int i = 0; cpy[i] != '^'; i++){
+    case C('V'):
+      for(int i = 0; cpy[i] != '\0'; i++){
         input.buf[input.e++ % INPUT_BUF] = cpy[i];
         consputc(cpy[i]);
       }
@@ -249,7 +247,7 @@ consoleintr(int (*getc)(void))
         input.e--;
         consputc(BACKSPACE);
       }
-      for(int i = 0; cpy[i] != '^'; i++){
+      for(int i = 0; cpy[i] != '\0'; i++){
         input.buf[input.e++ % INPUT_BUF] = cpy[i];
         consputc(cpy[i]);
       }
