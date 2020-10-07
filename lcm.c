@@ -24,6 +24,7 @@ int main(int argc,char* argv[])
         temp = lcmx(temp,atoi(argv[i]));
     }
   }
+  unlink("lcm_result.txt");
   int fd = open("lcm_result.txt", O_CREATE | O_RDWR);
   char str[50];
   if (temp != 0)
