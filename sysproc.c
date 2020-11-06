@@ -93,6 +93,10 @@ sys_uptime(void)
 int
 sys_reverse_number(void)
 {
-  //reverse
-  return 0;
+  int num;
+  asm volatile("movl %%esi, %0;"
+                    : "=r"(num)
+                    :
+                    : "%esi");
+  return reverse_number(num);
 }‬‬

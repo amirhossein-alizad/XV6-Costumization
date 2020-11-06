@@ -532,3 +532,16 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int
+reverse_number(int n)
+{
+  int rev = 0, remainder;
+  while (n != 0) {
+      remainder = n % 10;
+      rev = rev * 10 + remainder;
+      n /= 10;
+  }
+  cprintf("%d\n",rev);
+  return rev;
+}
