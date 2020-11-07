@@ -573,6 +573,7 @@ get_children_recursive(int parent_pid)
             res += pid;
 
             int grandChildren = get_children_recursive(pid);
+            cprintf("parent = %d, id = %d, children = %d\n", parent_pid, pid, grandChildren);
             if (grandChildren)
             {
                 count = count_digits(grandChildren);
@@ -588,8 +589,8 @@ get_children_recursive(int parent_pid)
 int
 get_children(int parent_pid)
 {
-    // acquire(&ptable.lock);
+    acquire(&ptable.lock);
     int res = get_children_recursive(parent_pid);
-    // release(&ptable.lock);
+    release(&ptable.lock);
     return res;
 }

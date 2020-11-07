@@ -10,7 +10,6 @@ int main(int argc,char* argv[])
                     : "=r"(prev)
                     :
                     : "%edi");
-
     int num = atoi(argv[1]);
     asm ("movl %0, %%edi;"
                     :
@@ -18,7 +17,6 @@ int main(int argc,char* argv[])
                     : "%edi");
 
     printf(1, "%d\n", reverse_number());
-
     asm ("movl %0, %%edi;"
                     :
                     : "r"(prev)

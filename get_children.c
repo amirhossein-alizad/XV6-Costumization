@@ -4,81 +4,46 @@
 
 int main(void)
 {
-    int main_pid = getpid();
-    // printf(1, "in main: pid: %d, parent_pid: %d\n", main_pid, get_parent_id());
-    printf(1, "in main: main_children: %d\n\n", get_children(main_pid));
-    int pid;
-
-    // for (int i = 0; i < 4; i++)
-    // {
-        pid = fork();
-        if (pid < 0)
+    printf(1, "starting from root, id = %d\n", getpid());
+    int pid1 = fork();
+    if(pid1 == 0)
+    {
+      int pid2 = fork();
+      if(pid2 == 0)
+      {
+        int pid3 = fork();
+        if(pid3 == 0)
         {
-            printf(2, "fork failed\n");
-            exit();
-        }
-        if (pid == 0)
-        {
-            // printf(1, "in child: pid: %d, parent_pid: %d\n", getpid(), get_parent_id());
-            exit();
-        }
-        else
-        {
+          sleep(1000);
           wait();
-            printf(1, "in main: child_pid: %d, my_children: %d\n", pid, get_children(getpid()));
-            printf(1, "in main: main_children: %d\n\n", get_children(main_pid));
-            pid = fork();
-            if (pid < 0)
-            {
-                printf(2, "fork failed\n");
-                exit();
-            }
-            if (pid == 0)
-            {
-                // printf(1, "in child: pid: %d, parent_pid: %d\n", getpid(), get_parent_id());
-                int gpid = fork();
-                if (gpid < 0)
-                {
-                    printf(2, "fork failed\n");
-                    exit();
-                }
-                if (gpid == 0)
-                {
-                    // asdfasd
-                }
-                else
-                {
-                  wait();
-                    printf(1, "in child: main_children: %d\n\n", get_children(main_pid));
-                }
-
-                exit();
-            }
-            else
-            {
-              wait();
-                printf(1, "in main: child_pid: %d, my_children: %d\n", pid, get_children(getpid()));
-                printf(1, "in main: main_children: %d\n\n", get_children(main_pid));
-                pid = fork();
-                if (pid < 0)
-                {
-                    printf(2, "fork failed\n");
-                    exit();
-                }
-                if (pid == 0)
-                {
-                    // printf(1, "in child: pid: %d, parent_pid: %d\n", getpid(), get_parent_id());
-                    exit();
-                }
-                else
-                {
-                  wait();
-                    printf(1, "in main: child_pid: %d, my_children: %d\n", pid, get_children(getpid()));
-                    printf(1, "in main: main_children: %d\n\n", get_children(main_pid));
-                }
-            }
+          exit();
         }
-    // }
-
-    exit();
+        else{
+          sleep(1000);
+          wait();
+          exit();
+        }
+      }
+      else
+      {
+        sleep(1000);
+        wait();
+        exit();
+      }
+    }
+    else{
+      int pid2 = fork();
+      if (pid2 == 0)
+      {
+        sleep(1000);
+        wait();
+        exit();
+      }
+      else{
+        sleep(150);
+        printf(1, "id = %d, children and grandChildren = %d\n",getpid(), get_children(getpid()));
+        wait();
+        exit();
+      }
+    }
 }
