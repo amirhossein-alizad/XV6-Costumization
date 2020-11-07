@@ -94,10 +94,9 @@ int
 sys_reverse_number(void)
 {
   int num;
-  asm volatile("movl %%esi, %0;"
+  asm ("movl %%edi, %0;"
                     : "=r"(num)
                     :
-                    : "%esi");
-  cprintf("%d\n",num);
+                    : "%edi");
   return reverse_number(num);
 }
