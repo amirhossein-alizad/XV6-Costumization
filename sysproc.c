@@ -100,3 +100,12 @@ sys_reverse_number(void)
                     : "%edi");
   return reverse_number(num);
 }
+
+int
+sys_get_children(void)
+{
+  int pid;
+  if (argint(0, &pid) < 0)
+      return -1;
+  return get_children(pid);
+}

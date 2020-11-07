@@ -21,3 +21,4 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_reverse_number 22
+#define SYS_get_children 23

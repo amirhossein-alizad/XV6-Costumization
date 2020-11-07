@@ -38,10 +38,10 @@ struct cpu*
 mycpu(void)
 {
   int apicid, i;
-  
+
   if(readeflags()&FL_IF)
     panic("mycpu called with interrupts enabled\n");
-  
+
   apicid = lapicid();
   // APIC IDs are not guaranteed to be contiguous. Maybe we should have
   // a reverse map, or reserve a register to store &cpus[i].
@@ -124,7 +124,7 @@ userinit(void)
   extern char _binary_initcode_start[], _binary_initcode_size[];
 
   p = allocproc();
-  
+
   initproc = p;
   if((p->pgdir = setupkvm()) == 0)
     panic("userinit: out of memory?");
@@ -275,7 +275,7 @@ wait(void)
   struct proc *p;
   int havekids, pid;
   struct proc *curproc = myproc();
-  
+
   acquire(&ptable.lock);
   for(;;){
     // Scan through table looking for exited children.
@@ -325,7 +325,7 @@ scheduler(void)
   struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
-  
+
   for(;;){
     // Enable interrupts on this processor.
     sti();
@@ -418,7 +418,7 @@ void
 sleep(void *chan, struct spinlock *lk)
 {
   struct proc *p = myproc();
-  
+
   if(p == 0)
     panic("sleep");
 
@@ -543,4 +543,53 @@ reverse_number(int n)
       n /= 10;
   }
   return rev;
+}
+
+int
+count_digits(int n)
+{
+  int count = 0;
+  while(n != 0)
+  {
+    n /= 10;
+    count += 1;
+  }
+  return count;
+}
+
+int
+get_children_recursive(int parent_pid)
+{
+    int res = 0;
+    struct proc *p;
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+        if (p->parent->pid == parent_pid)
+        {
+            int pid = p->pid;
+            int count = count_digits(pid);
+            for (int i = 0; i < count; i++)
+                res *= 10;
+            res += pid;
+
+            int grandChildren = get_children_recursive(pid);
+            if (grandChildren)
+            {
+                count = count_digits(grandChildren);
+                for (int i = 0; i < count; i++)
+                    res *= 10;
+                res += grandChildren;
+            }
+        }
+    }
+    return res;
+}
+
+int
+get_children(int parent_pid)
+{
+    // acquire(&ptable.lock);
+    int res = get_children_recursive(parent_pid);
+    // release(&ptable.lock);
+    return res;
 }
