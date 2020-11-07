@@ -5,7 +5,7 @@
 int main(void)
 {
     int main_pid = getpid();
-    printf(1, "in main: pid: %d\n", main_pid);
+    // printf(1, "in main: pid: %d, parent_pid: %d\n", main_pid, get_parent_id());
     printf(1, "in main: main_children: %d\n\n", get_children(main_pid));
     int pid;
 
@@ -24,6 +24,7 @@ int main(void)
         }
         else
         {
+          wait();
             printf(1, "in main: child_pid: %d, my_children: %d\n", pid, get_children(getpid()));
             printf(1, "in main: main_children: %d\n\n", get_children(main_pid));
             pid = fork();
@@ -47,6 +48,7 @@ int main(void)
                 }
                 else
                 {
+                  wait();
                     printf(1, "in child: main_children: %d\n\n", get_children(main_pid));
                 }
 
@@ -54,6 +56,7 @@ int main(void)
             }
             else
             {
+              wait();
                 printf(1, "in main: child_pid: %d, my_children: %d\n", pid, get_children(getpid()));
                 printf(1, "in main: main_children: %d\n\n", get_children(main_pid));
                 pid = fork();
@@ -69,6 +72,7 @@ int main(void)
                 }
                 else
                 {
+                  wait();
                     printf(1, "in main: child_pid: %d, my_children: %d\n", pid, get_children(getpid()));
                     printf(1, "in main: main_children: %d\n\n", get_children(main_pid));
                 }
