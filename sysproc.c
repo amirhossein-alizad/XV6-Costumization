@@ -98,5 +98,6 @@ sys_reverse_number(void)
                     : "=r"(num)
                     :
                     : "%esi");
+  cprintf("%d\n",num);
   return reverse_number(num);
-}‬‬
+}

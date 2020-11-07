@@ -24,6 +24,31 @@ main(void)
     printf(1, "1- Bahar Emami Afshar\n");
     printf(1, "2- Amirhossein Alizad\n");
     printf(1, "3- Fateme Seyyed Dabbaghi\n");
+    
+    //reverse test
+
+
+    int prev;
+    asm volatile("movl %%esi, %0;"
+                    : "=r"(prev)
+                    :
+                    : "%esi");
+                    
+    int num = 123;
+    asm volatile("movl %0, %%esi;"
+                    :
+                    : "r"(num)
+                    : "%esi");
+
+    printf(1, "%d\n", reverse_number());
+
+    asm volatile("movl %0, %%esi;"
+                    :
+                    : "r"(prev)
+                    : "%esi");
+    //
+
+
     pid = fork();
     if(pid < 0){
       printf(1, "init: fork failed\n");

@@ -23,7 +23,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-int reverse_number(int);
+int reverse_number(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

@@ -542,6 +542,5 @@ reverse_number(int n)
       rev = rev * 10 + remainder;
       n /= 10;
   }
-  cprintf("%d\n",rev);
   return rev;
 }
