@@ -202,7 +202,10 @@ fork(void)
 
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
-
+  for(int i = 0; i < 24; i++)
+  {
+    // np->number_of_calls[i] = 0;
+  }
   for(i = 0; i < NOFILE; i++)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);
@@ -594,10 +597,47 @@ get_children(int parent_pid)
     release(&ptable.lock);
     return res;
 }
-
+static char* syscallnames[] = {
+          "fork",
+         "exit",
+         "wait",
+         "pipe",
+         "read",
+         "kill",
+         "exec",
+         "fstat",
+          "chdir",
+          "dup",
+         "getpid",
+          "sbrk",
+      "sleep",
+         "uptime",
+           "open",
+          "write",
+          "mknod",
+         "unlink",
+         "link",
+          "mkdir",
+          "close",
+ "reverse_number",
+   "get_children",
+ "trace_syscalls",
+};
 int
 trace_syscalls(int state)
 {
-
+  if (state == 1)
+  {
+    struct proc *p;
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+      cprintf("\nNAME : %s\n", p->name);
+      for(int i = 0; i < 24; i++)
+      {
+        if(p->number_of_calls[i])
+          cprintf("%s : %d\n", syscallnames[i],  p->number_of_calls[i]);
+      }
+    }
+  }
   return 0;
 }

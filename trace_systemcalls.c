@@ -4,6 +4,11 @@
 
 int main(void)
 {
-    trace_syscalls(0);
+    int state = 1;
+
+    while (1)
+    {
+        trace_syscalls(state);
+    }
     exit();
 }

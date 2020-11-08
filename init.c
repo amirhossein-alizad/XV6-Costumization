@@ -25,7 +25,7 @@ main(void)
     printf(1, "1- Bahar Emami Afshar\n");
     printf(1, "2- Amirhossein Alizad\n");
     printf(1, "3- Fateme Seyyed Dabbaghi\n");
-    
+
     pid = fork();
     if(pid < 0){
       printf(1, "init: fork failed\n");
