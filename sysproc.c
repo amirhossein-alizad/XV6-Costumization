@@ -110,11 +110,38 @@ sys_get_children(void)
   return get_children(pid);
 }
 
-int
+void
 sys_trace_syscalls(void)
 {
-  int state;
-  if (argint(0, &state) < 0)
-      return -1;
-  return trace_syscalls(state);
+  int  n;
+  struct proc * p = myproc();
+  if(p->pid == 2)
+  {
+    set_trace_state(1);
+    while(1)
+    {
+      acquire(&tickslock);
+      int ticks0;
+      ticks0 = ticks;
+      if(get_trace_state() == 1)
+      {
+        while(ticks - ticks0 < 500){
+          if(myproc()->killed){
+            release(&tickslock);
+          }
+          sleep(&ticks, &tickslock);
+        }
+        trace_syscalls(1);
+      }
+      release(&tickslock);
+    }
+  }
+  else
+  {
+    if (argint(0, &n) < 0)
+    {
+        return;
+    }
+    set_trace_state(n);
+  }
 }

@@ -184,7 +184,7 @@ UPROGS=\
 	_lcm\
 	_reverse\
 	_get_children\
-	_trace_systemcalls\
+	_trace_syscalls\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -260,7 +260,7 @@ EXTRA=\
 	lcm.c\
 	reverse.c\
 	get_children.c\
-	trace_systemcalls.c\
+	trace_syscalls.c\
 
 dist:
 	rm -rf dist

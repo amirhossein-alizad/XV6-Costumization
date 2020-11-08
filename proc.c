@@ -1,4 +1,4 @@
-#include "types.h"
+  #include "types.h"
 #include "defs.h"
 #include "param.h"
 #include "memlayout.h"
@@ -10,8 +10,25 @@
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
+  int state;
 } ptable;
 
+int get_trace_state()
+{
+  int trace_state ;
+  acquire(&ptable.lock);
+  trace_state = ptable.state;
+  release(&ptable.lock);
+  return trace_state;
+}
+
+int set_trace_state(int st)
+{
+  acquire(&ptable.lock);
+  ptable.state = st;
+  release(&ptable.lock);
+  return 0;
+}
 static struct proc *initproc;
 
 int nextpid = 1;
@@ -626,18 +643,24 @@ static char* syscallnames[] = {
 int
 trace_syscalls(int state)
 {
-  if (state == 1)
+  acquire(&ptable.lock);
+  if (ptable.state == 1)
   {
     struct proc *p;
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
-      cprintf("\nNAME : %s\n", p->name);
-      for(int i = 0; i < 24; i++)
+      if(p->name[0] != '\0')
       {
-        if(p->number_of_calls[i])
-          cprintf("%s : %d\n", syscallnames[i],  p->number_of_calls[i]);
+        cprintf("\nNAME : %s\n", p->name);
+        for(int i = 0; i < 24; i++)
+        {
+          if(p->number_of_calls[i])
+            cprintf("%s : %d\n", syscallnames[i],  p->number_of_calls[i]);
+        }
       }
+
     }
   }
+  release(&ptable.lock);
   return 0;
 }

@@ -16,7 +16,11 @@ main(void)
     mknod("console", 1, 1);
     open("console", O_RDWR);
   }
-
+  int process_id = fork();
+  if(process_id == 0)
+  {
+    trace_syscalls(1);
+  }
   dup(0);  // stdout
   dup(0);  // stderr
 
