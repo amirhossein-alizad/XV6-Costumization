@@ -25,6 +25,7 @@ int sleep(int);
 int uptime(void);
 int reverse_number(void);
 int get_children(int);
+int trace_syscalls(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

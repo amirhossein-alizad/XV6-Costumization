@@ -16,6 +16,7 @@ main(void)
     mknod("console", 1, 1);
     open("console", O_RDWR);
   }
+
   dup(0);  // stdout
   dup(0);  // stderr
 

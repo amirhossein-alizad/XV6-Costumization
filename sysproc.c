@@ -109,3 +109,12 @@ sys_get_children(void)
       return -1;
   return get_children(pid);
 }
+
+int
+sys_trace_syscalls(void)
+{
+  int state;
+  if (argint(0, &state) < 0)
+      return -1;
+  return trace_syscalls(state);
+}

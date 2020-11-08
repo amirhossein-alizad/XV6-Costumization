@@ -22,3 +22,4 @@
 #define SYS_close  21
 #define SYS_reverse_number 22
 #define SYS_get_children 23
+#define SYS_trace_syscalls 24

@@ -594,3 +594,10 @@ get_children(int parent_pid)
     release(&ptable.lock);
     return res;
 }
+
+int
+trace_syscalls(int state)
+{
+
+  return 0;
+}
