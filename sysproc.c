@@ -150,6 +150,12 @@ void
 sys_change_line(void)
 {
   int Pid, line;
+  if (argint(0, &Pid) < 0)
+      return;
+
+  if (argint(1, &line) < 0)
+      return;
+
   change_line(Pid, line);
   return;
 }
@@ -158,6 +164,12 @@ void
 sys_set_ticket(void)
 {
   int Pid, ticket;
+  if (argint(0, &Pid) < 0)
+      return;
+
+  if (argint(1, &ticket) < 0)
+      return;
+
   set_ticket(Pid, ticket);
   return;
 }
@@ -165,8 +177,17 @@ sys_set_ticket(void)
 void
 sys_set_bjf_param_process(void)
 {
-  int Pid, Priority_ratio, Executed_cycle_ratio;
-  uint Arrival_time_ratio;
+  int Pid, Priority_ratio, Arrival_time_ratio, Executed_cycle_ratio;
+
+  if (argint(0, &Pid) < 0)
+      return;
+  if (argint(1, &Priority_ratio) < 0)
+      return;
+  if (argint(2, &Arrival_time_ratio) < 0)
+    return;
+  if (argint(3, &Executed_cycle_ratio) < 0)
+    return;
+
   set_bjf_param_process(Pid, Priority_ratio, Arrival_time_ratio, Executed_cycle_ratio);
   return;
 }
@@ -174,8 +195,14 @@ sys_set_bjf_param_process(void)
 void
 sys_set_bjf_param_system(void)
 {
-  int Priority_ratio, Executed_cycle_ratio;
-  uint Arrival_time_ratio;
+  int Priority_ratio, Arrival_time_ratio, Executed_cycle_ratio;
+  if (argint(0, &Priority_ratio) < 0)
+      return;
+  if (argint(1, &Arrival_time_ratio) < 0)
+    return;
+  if (argint(2, &Executed_cycle_ratio) < 0)
+    return;
+
   set_bjf_param_system(Priority_ratio, Arrival_time_ratio, Executed_cycle_ratio);
   return;
 }

@@ -520,17 +520,19 @@ kill(int pid)
 // Print a process listing to console.  For debugging.
 // Runs when user types ^P on console.
 // No lock to avoid wedging a stuck machine further.
+
+static char *states[] = {
+  [UNUSED]    "UNUSED  ",
+  [EMBRYO]    "EMBRYO  ",
+  [SLEEPING]  "SLEEPING",
+  [RUNNABLE]  "RUNNABLE",
+  [RUNNING]   "RUNNING ",
+  [ZOMBIE]    "ZOMBIE  "
+  };
+
 void
 procdump(void)
 {
-  static char *states[] = {
-  [UNUSED]    "unused",
-  [EMBRYO]    "embryo",
-  [SLEEPING]  "sleep ",
-  [RUNNABLE]  "runble",
-  [RUNNING]   "run   ",
-  [ZOMBIE]    "zombie"
-  };
   int i;
   struct proc *p;
   char *state;
@@ -668,6 +670,7 @@ trace_syscalls(int state)
 int
 change_line(int Pid, int line)
 {
+  acquire(&ptable.lock);
   struct proc *p;
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
@@ -676,12 +679,14 @@ change_line(int Pid, int line)
         p->queue = line;
     }
   }
+  release(&ptable.lock);
   return 0;
 }
 
 int
 set_ticket(int Pid, int ticket)
 {
+  acquire(&ptable.lock);
   struct proc *p;
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
@@ -690,12 +695,14 @@ set_ticket(int Pid, int ticket)
         p->tickets = ticket;
     }
   }
+  release(&ptable.lock);
   return 0;
 }
 
 int
-set_bjf_param_process(int Pid, int Priority_ratio, uint Arrival_time_ratio, int Executed_cycle_ratio)
+set_bjf_param_process(int Pid, int Priority_ratio, int Arrival_time_ratio, int Executed_cycle_ratio)
 {
+  acquire(&ptable.lock);
   struct proc *p;
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
@@ -706,30 +713,48 @@ set_bjf_param_process(int Pid, int Priority_ratio, uint Arrival_time_ratio, int 
         p->executed_cycle_ratio = Executed_cycle_ratio;
     }
   }
+  release(&ptable.lock);
   return 0;
 }
 
 int
-set_bjf_param_system(int Priority_ratio, uint Arrival_time_ratio, int Executed_cycle_ratio)
+set_bjf_param_system(int Priority_ratio, int Arrival_time_ratio, int Executed_cycle_ratio)
 {
   struct proc *p;
+  acquire(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
     p->priority_ratio = Priority_ratio;
     p->arrival_time_ratio = Arrival_time_ratio;
     p->executed_cycle_ratio = Executed_cycle_ratio;
   }
+  release(&ptable.lock);
   return 0;
 }
 
 int
 print_info(void)
 {
-  cprintf("name        pid         state       queue       tickets     \n");
+  char *state;
+  cprintf("name \t pid \t state \t queue \t tickets \t \n");
   struct proc *p;
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
-    cprintf("print shit here!");
+    if (p->state == UNUSED)
+      continue;
+    if(p->state >= 0 && p->state < NELEM(states) && states[p->state])
+      state = states[p->state];
+    else
+      state = "???";
+
+    cprintf("%s \t %d \t %s \t %d \t %d \t \n",
+      p->name,
+      p->pid,
+      state,
+      p->queue,
+      p->tickets
+      );
+
   }
   return 0;
 }
