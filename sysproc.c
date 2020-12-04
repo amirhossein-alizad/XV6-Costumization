@@ -149,29 +149,40 @@ sys_trace_syscalls(void)
 void
 sys_change_line(void)
 {
-
+  int Pid, line;
+  change_line(Pid, line);
+  return;
 }
 
 void
 sys_set_ticket(void)
 {
-
+  int Pid, ticket;
+  set_ticket(Pid, ticket);
+  return;
 }
 
 void
 sys_set_bjf_param_process(void)
 {
-
+  int Pid, Priority_ratio, Executed_cycle_ratio;
+  uint Arrival_time_ratio;
+  set_bjf_param_process(Pid, Priority_ratio, Arrival_time_ratio, Executed_cycle_ratio);
+  return;
 }
 
 void
 sys_set_bjf_param_system(void)
 {
-
+  int Priority_ratio, Executed_cycle_ratio;
+  uint Arrival_time_ratio;
+  set_bjf_param_system(Priority_ratio, Arrival_time_ratio, Executed_cycle_ratio);
+  return;
 }
 
 void
 sys_print_info(void)
 {
-
+  print_info();
+  return;
 }

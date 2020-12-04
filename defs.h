@@ -125,8 +125,8 @@ int             get_children(int);
 int             trace_syscalls(int);
 int             change_line(int, int);
 int             set_ticket(int, int);
-int             set_bjf_param_process(int, int, int, int);
-int             set_bjf_param_system(int, int, int);
+int             set_bjf_param_process(int, int, uint, int);
+int             set_bjf_param_system(int, uint, int);
 int             print_info(void);
 
 // swtch.S

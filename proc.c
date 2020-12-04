@@ -627,7 +627,7 @@ static char* syscallnames[] = {
           "dup",
          "getpid",
           "sbrk",
-      "sleep",
+          "sleep",
          "uptime",
            "open",
           "write",
@@ -666,36 +666,70 @@ trace_syscalls(int state)
 }
 
 int
-change_line(int pid, int line)
+change_line(int Pid, int line)
 {
-
+  struct proc *p;
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->pid == Pid)
+    {
+        p->queue = line;
+    }
+  }
   return 0;
 }
 
 int
-set_ticket(int pid, int ticket)
+set_ticket(int Pid, int ticket)
 {
-
+  struct proc *p;
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->pid == Pid)
+    {
+        p->tickets = ticket;
+    }
+  }
   return 0;
 }
 
 int
-set_bjf_param_process(int pid, int priority_ratio, int arrival_time_ratio, int executed_cycle_ratio)
+set_bjf_param_process(int Pid, int Priority_ratio, uint Arrival_time_ratio, int Executed_cycle_ratio)
 {
-
+  struct proc *p;
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->pid == Pid)
+    {
+        p->priority_ratio = Priority_ratio;
+        p->arrival_time_ratio = Arrival_time_ratio;
+        p->executed_cycle_ratio = Executed_cycle_ratio;
+    }
+  }
   return 0;
 }
 
 int
-set_bjf_param_system(int priority_ratio, int arrival_time_ratio, int executed_cycle_ratio)
+set_bjf_param_system(int Priority_ratio, uint Arrival_time_ratio, int Executed_cycle_ratio)
 {
-
+  struct proc *p;
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    p->priority_ratio = Priority_ratio;
+    p->arrival_time_ratio = Arrival_time_ratio;
+    p->executed_cycle_ratio = Executed_cycle_ratio;
+  }
   return 0;
 }
 
 int
 print_info(void)
 {
-
+  cprintf("name        pid         state       queue       tickets     \n");
+  struct proc *p;
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    cprintf("print shit here!");
+  }
   return 0;
 }
