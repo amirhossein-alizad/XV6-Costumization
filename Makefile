@@ -182,6 +182,7 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_lcm\
+	_foo\
 	_reverse\
 	_get_children\
 	_trace_syscalls\
@@ -258,6 +259,7 @@ EXTRA=\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 	lcm.c\
+	foo.c\
 	reverse.c\
 	get_children.c\
 	trace_syscalls.c\
