@@ -23,3 +23,8 @@
 #define SYS_reverse_number 22
 #define SYS_get_children 23
 #define SYS_trace_syscalls 24
+#define SYS_change_line 25
+#define SYS_set_ticket 26
+#define SYS_set_bjf_param_process 27
+#define SYS_set_bjf_param_system 28
+#define SYS_print_info 29

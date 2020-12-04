@@ -1,4 +1,4 @@
-  #include "types.h"
+#include "types.h"
 #include "defs.h"
 #include "param.h"
 #include "memlayout.h"
@@ -662,5 +662,40 @@ trace_syscalls(int state)
     }
   }
   release(&ptable.lock);
+  return 0;
+}
+
+int
+change_line(int pid, int line)
+{
+
+  return 0;
+}
+
+int
+set_ticket(int pid, int ticket)
+{
+
+  return 0;
+}
+
+int
+set_bjf_param_process(int pid, int priority_ratio, int arrival_time_ratio, int executed_cycle_ratio)
+{
+
+  return 0;
+}
+
+int
+set_bjf_param_system(int priority_ratio, int arrival_time_ratio, int executed_cycle_ratio)
+{
+
+  return 0;
+}
+
+int
+print_info(void)
+{
+
   return 0;
 }

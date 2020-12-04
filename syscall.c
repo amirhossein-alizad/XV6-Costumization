@@ -106,6 +106,11 @@ extern int sys_uptime(void);
 extern int sys_reverse_number(void);
 extern int sys_get_children(void);
 extern int sys_trace_syscalls(void);
+extern int sys_change_line(void);
+extern int sys_set_ticket(void);
+extern int sys_set_bjf_param_process(void);
+extern int sys_set_bjf_param_system(void);
+extern int sys_print_info(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]           sys_fork,
@@ -132,6 +137,11 @@ static int (*syscalls[])(void) = {
 [SYS_reverse_number] sys_reverse_number,
 [SYS_get_children]   sys_get_children,
 [SYS_trace_syscalls] sys_trace_syscalls,
+[SYS_change_line] sys_change_line,
+[SYS_set_ticket] sys_set_ticket,
+[SYS_set_bjf_param_process] sys_set_bjf_param_process,
+[SYS_set_bjf_param_system] sys_set_bjf_param_system,
+[SYS_print_info] sys_print_info,
 };
 
 void
@@ -141,7 +151,6 @@ syscall(void)
   struct proc *curproc = myproc();
 
   num = curproc->tf->eax;
-  // cprintf("%d\n",num);
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->number_of_calls[num - 1]++;
     curproc->tf->eax = syscalls[num]();

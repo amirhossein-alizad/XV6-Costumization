@@ -26,6 +26,11 @@ int uptime(void);
 int reverse_number(void);
 int get_children(int);
 int trace_syscalls(int);
+int change_line(int, int);
+int set_ticket(int, int);
+int set_bjf_param_process(int, int, int, int);
+int set_bjf_param_system(int, int, int);
+int print_info(void);
 
 // ulib.c
 int stat(const char*, struct stat*);
