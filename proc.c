@@ -106,6 +106,13 @@ found:
   p->state = EMBRYO;
   p->pid = nextpid++;
 
+  p->queue = 2;
+  p->tickets = 10;
+  p->cycle = 1;
+  acquire(&tickslock);
+  p->arrival_time = ticks;
+  release(&tickslock);
+
   release(&ptable.lock);
 
   // Allocate kernel stack.
@@ -219,10 +226,7 @@ fork(void)
 
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
-  for(int i = 0; i < 24; i++)
-  {
-    // np->number_of_calls[i] = 0;
-  }
+
   for(i = 0; i < NOFILE; i++)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);
@@ -331,6 +335,13 @@ wait(void)
   }
 }
 
+int rand()
+{
+  static int random = 3251;
+  random = (((random*random)/100)+53)%10000;
+  return random;
+}
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -351,26 +362,105 @@ scheduler(void)
     sti();
 
     // Loop over process table looking for process to run.
+    struct proc *queue1[NPROC],*queue2[NPROC],*queue3[NPROC];
+    int indexQ1=0,indexQ2=0,indexQ3=0;
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
 
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
+      if(p->cycle >= 10000 && p->queue != 1){
+        p->queue = 1;
+        p->cycle = 1;
+      }
 
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
-
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
+      if(p->queue == 1){
+        queue1[indexQ1] = p;
+        indexQ1++;
+      }
+      else if(p->queue == 2){
+        queue2[indexQ2] = p;
+        indexQ2++;
+      }
+      else if(p->queue == 3){
+        queue3[indexQ3] = p;
+        indexQ3++;
+      }
     }
-    release(&ptable.lock);
+
+    if (indexQ1 > 0){
+      //round robin
+      //check for time quantum???????????
+      p = queue1[0];
+    }
+
+    else if (indexQ2 > 0){
+      //ticket
+
+      int tickets_sum =0;
+      for (int i = 0; i < indexQ1; i++)
+      {
+        tickets_sum += queue2[i]->tickets;
+      }
+
+      int winner_ticket = rand()%tickets_sum;
+      tickets_sum =0;
+
+      for (int i = 0; i < indexQ2; i++)
+      {
+        tickets_sum += queue2[i]->tickets;
+        if (tickets_sum > winner_ticket)
+        {
+          p = queue2[i];
+          break;
+        }
+        
+      }
+
+    }
+
+    else if (indexQ3 > 0){
+      //best job first
+
+      int max=0;
+      int index=0;
+      for (int i = 0; i < indexQ3; i++)
+      {
+        int rank = (queue3[i]->priority_ratio/queue3[i]->tickets)+(queue3[i]->arrival_time * queue3[i]->arrival_time_ratio)
+        + (queue3[i]->cycle * queue3[i]->executed_cycle_ratio);
+        if(max < rank)
+          {
+            max = rank;
+            index = i;
+          }
+      }
+      p = queue3[index];
+    }
+
+    
+    else if(indexQ1 ==0 && indexQ2 ==0 && indexQ3 ==0 )
+    {
+      release(&ptable.lock);
+      continue;  
+    }
+
+    //aging
+    p->cycle ++;
+
+
+    // Switch to chosen process.  It is the process's job
+    // to release ptable.lock and then reacquire it
+    // before jumping back to us.
+    c->proc = p;
+    switchuvm(p);
+    p->state = RUNNING;
+
+    swtch(&(c->scheduler), p->context);
+    switchkvm();
+
+    // Process is done running for now.
+    // It should have changed its p->state before coming back.
+    c->proc = 0;
 
   }
 }

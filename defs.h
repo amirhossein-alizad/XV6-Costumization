@@ -128,6 +128,7 @@ int             set_ticket(int, int);
 int             set_bjf_param_process(int, int, int, int);
 int             set_bjf_param_system(int, int, int);
 int             print_info(void);
+int             rand(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
