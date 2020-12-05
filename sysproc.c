@@ -117,7 +117,7 @@ sys_trace_syscalls(void)
   struct proc * p = myproc();
   if(p->pid == 2)
   {
-    set_trace_state(1);
+    set_trace_state(0);
     while(1)
     {
       acquire(&tickslock);

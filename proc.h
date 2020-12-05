@@ -50,9 +50,11 @@ struct proc {
   char name[16];               // Process name (debugging)
   int number_of_calls[25];
   int queue;                   // priority queue level
-  int tickets;
+  uint tickets;
+  uint arrival_time;
+  int cycle;
   int priority_ratio;
-  uint arrival_time_ratio;
+  int arrival_time_ratio;
   int executed_cycle_ratio;
 };
 

@@ -677,6 +677,7 @@ change_line(int Pid, int line)
     if (p->pid == Pid)
     {
         p->queue = line;
+        break;
     }
   }
   release(&ptable.lock);
@@ -693,6 +694,7 @@ set_ticket(int Pid, int ticket)
     if (p->pid == Pid)
     {
         p->tickets = ticket;
+        break;
     }
   }
   release(&ptable.lock);
@@ -711,6 +713,7 @@ set_bjf_param_process(int Pid, int Priority_ratio, int Arrival_time_ratio, int E
         p->priority_ratio = Priority_ratio;
         p->arrival_time_ratio = Arrival_time_ratio;
         p->executed_cycle_ratio = Executed_cycle_ratio;
+        break;
     }
   }
   release(&ptable.lock);
@@ -736,7 +739,7 @@ int
 print_info(void)
 {
   char *state;
-  cprintf("name \t pid \t state \t queue \t tickets \t \n");
+  cprintf("name \t pid \t state \t queue \t tickets \t priority_ratio \t arrival_time_ratio \t executed_cycle_ratio \t rank \t cycles\n");
   struct proc *p;
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
@@ -747,12 +750,19 @@ print_info(void)
     else
       state = "???";
 
-    cprintf("%s \t %d \t %s \t %d \t %d \t \n",
+    float rank = (p->priority_ratio/p->tickets) + (p->arrival_time*p->arrival_time_ratio) + (p->executed_cycle_ratio*p->cycle);
+
+    cprintf("%s \t %d \t %s \t %d \t %d \t %d \t %d \t %d \t %f \t %d\n",
       p->name,
       p->pid,
       state,
       p->queue,
-      p->tickets
+      p->tickets,
+      p->priority_ratio,
+      p->arrival_time_ratio,
+      p->executed_cycle_ratio,
+      rank,
+      p->cycle
       );
 
   }
