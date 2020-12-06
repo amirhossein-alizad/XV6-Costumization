@@ -129,6 +129,7 @@ int             set_bjf_param_process(int, int, int, int);
 int             set_bjf_param_system(int, int, int);
 int             print_info(void);
 int             rand(void);
+void            print_fixed_size_str(char* str, int flag, int number);
 // swtch.S
 void            swtch(struct context**, struct context*);
 

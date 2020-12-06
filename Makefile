@@ -187,8 +187,8 @@ UPROGS=\
 	_trace_syscalls\
 	_change_line\
 	_set_ticket\
-	_set_bjf_param_process\
-	_set_bjf_param_system\
+	_set_bjf_process\
+	_set_bjf_system\
 	_print_info\
 
 fs.img: mkfs README $(UPROGS)
@@ -259,7 +259,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c\
+	printf.c umalloc.c \
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 	foo.c\
@@ -268,8 +268,8 @@ EXTRA=\
 	trace_syscalls.c\
 	change_line.c\
 	set_ticket.c\
-	set_bjf_param_process.c\
-	set_bjf_param_system.c\
+	set_bjf_process.c\
+	set_bjf_system.c\
 	print_info.c\
 
 dist:

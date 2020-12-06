@@ -361,7 +361,7 @@ scheduler(void)
   for(;;){
     // Enable interrupts on this processor.
     sti();
-    
+
     // Loop over process table looking for process to run.
     struct proc *queue1[NPROC],*queue2[NPROC],*queue3[NPROC];
     int indexQ1=0,indexQ2=0,indexQ3=0;
@@ -415,7 +415,7 @@ scheduler(void)
           p = queue2[i];
           break;
         }
-        
+
       }
 
     }
@@ -438,11 +438,11 @@ scheduler(void)
       p = queue3[index];
     }
 
-    
+
     else if(indexQ1 ==0 && indexQ2 ==0 && indexQ3 ==0 )
     {
       release(&ptable.lock);
-      continue;  
+      continue;
     }
 
     //aging
@@ -732,6 +732,11 @@ static char* syscallnames[] = {
  "reverse_number",
    "get_children",
  "trace_syscalls",
+ "change_line",
+ "set_ticket",
+ "set_bjf_param_process",
+ "set_bjf_param_system",
+ "print_info"
 };
 int
 trace_syscalls(int state)
@@ -745,7 +750,7 @@ trace_syscalls(int state)
       if(p->name[0] != '\0')
       {
         cprintf("\nNAME : %s\n", p->name);
-        for(int i = 0; i < 24; i++)
+        for(int i = 0; i < 29; i++)
         {
           if(p->number_of_calls[i])
             cprintf("%s : %d\n", syscallnames[i],  p->number_of_calls[i]);
@@ -818,22 +823,46 @@ set_bjf_param_system(int Priority_ratio, int Arrival_time_ratio, int Executed_cy
   acquire(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
-    
-    p->priority_ratio = Priority_ratio;
-    p->arrival_time_ratio = Arrival_time_ratio;
-    p->executed_cycle_ratio = Executed_cycle_ratio;
-    break;
-  
+    if(p->pid > 0){
+      p->priority_ratio = Priority_ratio;
+      p->arrival_time_ratio = Arrival_time_ratio;
+      p->executed_cycle_ratio = Executed_cycle_ratio;
+    }
   }
   release(&ptable.lock);
   return 0;
 }
 
+void print_fixed_size_str(char* str, int flag, int number){
+  if(flag){
+    int c = count_digits(number);
+    cprintf("%d", number);
+    for(int i = 0; i < 23 - c; i++){
+      cprintf(" ");
+    }
+  }
+  else{
+    cprintf("%s", str);
+    for(int i = 0; i < 23 - strlen(str); i++){
+      cprintf(" ");
+    }
+  }
+}
 int
 print_info(void)
 {
   char *state;
-  cprintf("name \t pid \t state \t queue \t tickets \t priority_ratio \t arrival_time_ratio \t executed_cycle_ratio \t rank \t cycles\n");
+  print_fixed_size_str("name",0,0);
+  print_fixed_size_str("pid",0,0);
+  print_fixed_size_str("state",0,0);
+  print_fixed_size_str("queue",0,0);
+  print_fixed_size_str("tickets",0,0);
+  print_fixed_size_str("priority_ratio",0,0);
+  cprintf("%s  \t","arrival_time_ratio");
+  cprintf("%s  \t","executed_cycle_ratio");
+  print_fixed_size_str("cycles",0,0);
+  cprintf("\n");
+  cprintf("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
   struct proc *p;
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
@@ -845,19 +874,18 @@ print_info(void)
       state = "???";
 
     int rank = (p->priority_ratio/p->tickets) + (p->arrival_time*p->arrival_time_ratio) + (p->executed_cycle_ratio*p->cycle);
+    print_fixed_size_str(p->name,0,0);
+    print_fixed_size_str(" ",1,p->pid);
+    print_fixed_size_str(state,0,0);
+    print_fixed_size_str(" ",1,p->queue);
+    print_fixed_size_str(" ",1,p->tickets);
+    print_fixed_size_str(" ",1,p->priority_ratio);
+    print_fixed_size_str(" ",1,p->arrival_time_ratio);
+    print_fixed_size_str(" ",1,p->executed_cycle_ratio);
+    print_fixed_size_str(" ",1,rank);
+    cprintf("\n");
 
-    cprintf("%s \t %d \t %s \t %d \t %d \t %d \t %d \t %d \t %d \t %d\n",
-      p->name,
-      p->pid,
-      state,
-      p->queue,
-      p->tickets,
-      p->priority_ratio,
-      p->arrival_time_ratio,
-      p->executed_cycle_ratio,
-      rank,
-      p->cycle
-      );
+
 
   }
   return 0;
