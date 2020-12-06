@@ -4,14 +4,8 @@
 #include "fcntl.h"
 
 int main (int argc, char **argv) {
-    int n = 0;
 
-    if (argc < 2) {
-        n = 1;
-    } else {
-        n = atoi(argv[1]);
-    }
-
+    int n = 1<<24;
     int i = 0, j = 0;
     float x = 0;
     for (i = 0; i < n; i++) {
@@ -24,10 +18,10 @@ int main (int argc, char **argv) {
             }
             exit();
         }
+        else {
+            wait();
+        }
     }
-    for (i = 0; i < n; i++) {
-        wait();
-    }
-    printf(1, "end\n");
+    printf(1,"end\n");
     exit();
 }

@@ -818,9 +818,12 @@ set_bjf_param_system(int Priority_ratio, int Arrival_time_ratio, int Executed_cy
   acquire(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
+    
     p->priority_ratio = Priority_ratio;
     p->arrival_time_ratio = Arrival_time_ratio;
     p->executed_cycle_ratio = Executed_cycle_ratio;
+    break;
+  
   }
   release(&ptable.lock);
   return 0;

@@ -181,7 +181,6 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
-	_lcm\
 	_foo\
 	_reverse\
 	_get_children\
@@ -263,7 +262,6 @@ EXTRA=\
 	printf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
-	lcm.c\
 	foo.c\
 	reverse.c\
 	get_children.c\
