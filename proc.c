@@ -109,9 +109,7 @@ found:
   p->queue = 2;
   p->tickets = 10;
   p->cycle = 1;
-  acquire(&tickslock);
   p->arrival_time = ticks;
-  release(&tickslock);
 
   release(&ptable.lock);
 
@@ -360,7 +358,7 @@ scheduler(void)
   for(;;){
     // Enable interrupts on this processor.
     sti();
-
+    
     // Loop over process table looking for process to run.
     struct proc *queue1[NPROC],*queue2[NPROC],*queue3[NPROC];
     int indexQ1=0,indexQ2=0,indexQ3=0;
@@ -398,7 +396,7 @@ scheduler(void)
       //ticket
 
       int tickets_sum =0;
-      for (int i = 0; i < indexQ1; i++)
+      for (int i = 0; i < indexQ2; i++)
       {
         tickets_sum += queue2[i]->tickets;
       }
@@ -461,7 +459,7 @@ scheduler(void)
     // Process is done running for now.
     // It should have changed its p->state before coming back.
     c->proc = 0;
-
+    release(&ptable.lock);
   }
 }
 

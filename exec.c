@@ -106,7 +106,7 @@ exec(char *path, char **argv)
   acquire(&tickslock);
   curproc->arrival_time = ticks;
   release(&tickslock);
-  
+
   switchuvm(curproc);
   freevm(oldpgdir);
   return 0;
