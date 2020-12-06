@@ -101,8 +101,11 @@ exec(char *path, char **argv)
   curproc->tf->esp = sp;
 
   curproc->tickets = 1000000;
-  curproc->queue = 1;
+  curproc->queue = 2;
   curproc->cycle = 1;
+  curproc->arrival_time_ratio = 1;
+  curproc->executed_cycle_ratio = 1;
+  curproc->priority_ratio = 1;
   acquire(&tickslock);
   curproc->arrival_time = ticks;
   release(&tickslock);

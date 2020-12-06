@@ -110,6 +110,9 @@ found:
   p->tickets = 10;
   p->cycle = 1;
   p->arrival_time = ticks;
+  p->arrival_time_ratio = 1;
+  p->executed_cycle_ratio = 1;
+  p->priority_ratio = 1;
 
   release(&ptable.lock);
 
@@ -838,9 +841,9 @@ print_info(void)
     else
       state = "???";
 
-    float rank = (p->priority_ratio/p->tickets) + (p->arrival_time*p->arrival_time_ratio) + (p->executed_cycle_ratio*p->cycle);
+    int rank = (p->priority_ratio/p->tickets) + (p->arrival_time*p->arrival_time_ratio) + (p->executed_cycle_ratio*p->cycle);
 
-    cprintf("%s \t %d \t %s \t %d \t %d \t %d \t %d \t %d \t %f \t %d\n",
+    cprintf("%s \t %d \t %s \t %d \t %d \t %d \t %d \t %d \t %d \t %d\n",
       p->name,
       p->pid,
       state,
