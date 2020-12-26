@@ -184,12 +184,11 @@ UPROGS=\
 	_foo\
 	_reverse\
 	_get_children\
-	_trace_syscalls\
 	_change_line\
 	_set_ticket\
 	_set_bjf_process\
 	_set_bjf_system\
-	_print_info\
+	_semaphore_test\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -265,12 +264,11 @@ EXTRA=\
 	foo.c\
 	reverse.c\
 	get_children.c\
-	trace_syscalls.c\
 	change_line.c\
 	set_ticket.c\
 	set_bjf_process.c\
 	set_bjf_system.c\
-	print_info.c\
+	semaphore_test.c\
 
 dist:
 	rm -rf dist

@@ -31,3 +31,5 @@
 #define SYS_semaphore_initialize 30
 #define SYS_semaphore_acquire 31
 #define SYS_semaphore_release 32
+#define SYS_producer 33
+#define SYS_consumer 34

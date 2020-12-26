@@ -21,6 +21,12 @@ struct {
   int m;
 } semaphores[5];
 
+struct {
+  int in;
+  int out;
+  char *msg[5];
+} producer_consumer_data;
+
 int get_trace_state()
 {
   int trace_state ;
@@ -903,9 +909,11 @@ void
 semaphore_initialize(int i, int v_, int m_)
 {
   cprintf("initialize semaphore %d of size %d\n",i,v_);
+  acquire(&semaphores[i].lock);
   semaphores[i].v = v_;
   semaphores[i].m = m_;
   semaphores[i].last = 0;
+  release(&semaphores[i].lock);
 }
 
 void
@@ -953,11 +961,27 @@ semaphore_release(int i)
       cprintf("removing process from waiting list\n");
       wakeup(semaphores[i].proc[0]);
       for (int j = 1; j < NPROC; j++)
-      {
         semaphores[i].proc[j-1] = semaphores[i].proc[j];
-        semaphores[i].last--;
-      }
+      semaphores[i].last--;
     }
   }
   release(&semaphores[i].lock);
+}
+
+void producer(int i){
+  for(int j = 0; j < 10; j++)
+  {
+    semaphore_acquire(i);
+    cprintf("producer writing message %d\n", j);
+    semaphore_release(i);
+  }
+}
+
+void consumer(int i){
+  for(int j = 0; j < 10; j++)
+  {
+    semaphore_acquire(i);
+    cprintf("consumer reading message %d\n", j);
+    semaphore_release(i);
+  }
 }

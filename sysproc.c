@@ -246,3 +246,21 @@ sys_semaphore_release(void)
   semaphore_release(i);
   return;
 }
+
+void
+sys_producer(void)
+{
+  int i;
+  if (argint(0, &i) < 0)
+      return;
+  producer(i);
+}
+
+void
+sys_consumer(void)
+{
+  int i;
+  if (argint(0, &i) < 0)
+      return;
+  consumer(i);
+}
