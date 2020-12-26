@@ -243,6 +243,6 @@ sys_semaphore_release(void)
   int i;
   if (argint(0, &i) < 0)
       return;
-  emaphore_release(i);
+  semaphore_release(i);
   return;
 }

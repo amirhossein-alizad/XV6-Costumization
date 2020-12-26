@@ -15,11 +15,11 @@ struct {
 
 struct {
   struct spinlock lock;
-  struct proc proc[NPROC];
-  int i;
+  struct proc* proc[NPROC];
+  int last;
   int v;
   int m;
-} semaphore;
+} semaphores[5];
 
 int get_trace_state()
 {
@@ -900,22 +900,52 @@ print_info(void)
 }
 
 void
-semaphore_initialize(int i, int v, int m)
+semaphore_initialize(int i, int v_, int m_)
 {
-  // code
-  return 0;
+  semaphores[i].v = v_;
+  semaphores[i].m = m_;
+  semaphores[i].last = 0;
 }
 
 void
 semaphore_acquire(int i)
 {
-  // code
-  return 0;
+  acquire(&semaphores[i].lock);
+  if (semaphores[i].m < semaphores[i].v)
+  {
+    semaphores[i].m++;
+  }
+  else
+  {
+    semaphores[i].proc[semaphores[i].last] = myproc();
+    sleep(myproc(), &semaphores[i].lock);
+    semaphores[i].last++;
+  }
+  release(&semaphores[i].lock);
 }
 
 void
-semaphore_release(void)
+semaphore_release(int i)
 {
-  // code
-  return 0;
+  acquire(&semaphores[i].lock);
+  if (semaphores[i].m < semaphores[i].v && semaphores[i].m > 0)
+  {
+    semaphores[i].m--;
+  }
+  else if (semaphores[i].m == semaphores[i].v)
+  {
+    if (semaphores[i].last == 0)
+    {
+      semaphores[i].m--;
+    }
+    else
+    {
+      wakeup(semaphores[i].proc[0]);
+      for (int j = 1; j < NPROC; j++)
+      {
+        semaphores[i].proc[j-1] = semaphores[i].proc[j];
+      }
+    }
+  }
+  release(&semaphores[i].lock);
 }

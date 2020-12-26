@@ -132,7 +132,7 @@ int             rand(void);
 void            print_fixed_size_str(char* str, int flag, int number);
 void            semaphore_initialize(int i, int v, int m);
 void            semaphore_acquire(int i);
-void            semaphore_release(void);
+void            semaphore_release(int i);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
