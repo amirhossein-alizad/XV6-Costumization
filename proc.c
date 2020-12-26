@@ -902,6 +902,7 @@ print_info(void)
 void
 semaphore_initialize(int i, int v_, int m_)
 {
+  cprintf("initialize semaphore %d of size %d\n",i,v_);
   semaphores[i].v = v_;
   semaphores[i].m = m_;
   semaphores[i].last = 0;
@@ -914,9 +915,13 @@ semaphore_acquire(int i)
   if (semaphores[i].m < semaphores[i].v)
   {
     semaphores[i].m++;
+    cprintf("acquire semaphore %d\n",i);
+    cprintf("number of active processes: %d\n",semaphores[i].m);
   }
   else
   {
+    cprintf("semaphore %d is full\n",i);
+    cprintf("waiting in list... index is %d\n",semaphores[i].last);
     semaphores[i].proc[semaphores[i].last] = myproc();
     sleep(myproc(), &semaphores[i].lock);
     semaphores[i].last++;
@@ -930,20 +935,27 @@ semaphore_release(int i)
   acquire(&semaphores[i].lock);
   if (semaphores[i].m < semaphores[i].v && semaphores[i].m > 0)
   {
+    cprintf("semaphore %d is released\n",i);
     semaphores[i].m--;
+    cprintf("remaining empty places %d\n",semaphores[i].v-semaphores[i].m);
   }
   else if (semaphores[i].m == semaphores[i].v)
   {
     if (semaphores[i].last == 0)
     {
+      cprintf("semaphore %d is released\n",i);
       semaphores[i].m--;
+      cprintf("remaining empty places %d\n",semaphores[i].v-semaphores[i].m);
     }
     else
     {
+      cprintf("waking up process\n");
+      cprintf("removing process from waiting list\n");
       wakeup(semaphores[i].proc[0]);
       for (int j = 1; j < NPROC; j++)
       {
         semaphores[i].proc[j-1] = semaphores[i].proc[j];
+        semaphores[i].last--;
       }
     }
   }
