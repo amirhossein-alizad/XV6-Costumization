@@ -111,6 +111,9 @@ extern int sys_set_ticket(void);
 extern int sys_set_bjf_param_process(void);
 extern int sys_set_bjf_param_system(void);
 extern int sys_print_info(void);
+extern int sys_semaphore_initialize(void);
+extern int sys_semaphore_acquire(void);
+extern int sys_semaphore_release(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]           sys_fork,
@@ -142,6 +145,9 @@ static int (*syscalls[])(void) = {
 [SYS_set_bjf_param_process] sys_set_bjf_param_process,
 [SYS_set_bjf_param_system] sys_set_bjf_param_system,
 [SYS_print_info] sys_print_info,
+[SYS_semaphore_initialize] sys_semaphore_initialize,
+[SYS_semaphore_acquire] sys_semaphore_acquire,
+[SYS_semaphore_release] sys_semaphore_release,
 };
 
 void

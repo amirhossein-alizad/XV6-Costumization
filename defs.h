@@ -130,6 +130,10 @@ int             set_bjf_param_system(int, int, int);
 int             print_info(void);
 int             rand(void);
 void            print_fixed_size_str(char* str, int flag, int number);
+void            semaphore_initialize(int i, int v, int m);
+void            semaphore_acquire(int i);
+void            semaphore_release(void);
+
 // swtch.S
 void            swtch(struct context**, struct context*);
 

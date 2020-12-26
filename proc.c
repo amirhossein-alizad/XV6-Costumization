@@ -13,6 +13,14 @@ struct {
   int state;
 } ptable;
 
+struct {
+  struct spinlock lock;
+  struct proc proc[NPROC];
+  int i;
+  int v;
+  int m;
+} semaphore;
+
 int get_trace_state()
 {
   int trace_state ;
@@ -888,5 +896,26 @@ print_info(void)
 
 
   }
+  return 0;
+}
+
+void
+semaphore_initialize(int i, int v, int m)
+{
+  // code
+  return 0;
+}
+
+void
+semaphore_acquire(int i)
+{
+  // code
+  return 0;
+}
+
+void
+semaphore_release(void)
+{
+  // code
   return 0;
 }

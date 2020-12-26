@@ -28,3 +28,6 @@
 #define SYS_set_bjf_param_process 27
 #define SYS_set_bjf_param_system 28
 #define SYS_print_info 29
+#define SYS_semaphore_initialize 30
+#define SYS_semaphore_acquire 31
+#define SYS_semaphore_release 32

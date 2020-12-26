@@ -31,6 +31,9 @@ int set_ticket(int, int);
 int set_bjf_param_process(int, int, int, int);
 int set_bjf_param_system(int, int, int);
 int print_info(void);
+int semaphore_initialize(int, int, int);
+int semaphore_acquire(int);
+int semaphore_release(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

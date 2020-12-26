@@ -213,3 +213,36 @@ sys_print_info(void)
   print_info();
   return;
 }
+
+void
+sys_semaphore_initialize(void)
+{
+  int i, v, m;
+  if (argint(0, &i) < 0)
+      return;
+  if (argint(1, &v) < 0)
+    return;
+  if (argint(2, &m) < 0)
+    return;
+  semaphore_initialize(i, v, m);
+  return;
+}
+void
+sys_semaphore_acquire(void)
+{
+  int i;
+  if (argint(0, &i) < 0)
+      return;
+  semaphore_acquire(i);
+  return;
+}
+
+void
+sys_semaphore_release(void)
+{
+  int i;
+  if (argint(0, &i) < 0)
+      return;
+  emaphore_release(i);
+  return;
+}
