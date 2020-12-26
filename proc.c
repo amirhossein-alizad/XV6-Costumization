@@ -908,7 +908,6 @@ print_info(void)
 void
 semaphore_initialize(int i, int v_, int m_)
 {
-  cprintf("initialize semaphore %d of size %d\n",i,v_);
   acquire(&semaphores[i].lock);
   semaphores[i].v = v_;
   semaphores[i].m = m_;
@@ -923,16 +922,12 @@ semaphore_acquire(int i)
   if (semaphores[i].m < semaphores[i].v)
   {
     semaphores[i].m++;
-    cprintf("acquire semaphore %d\n",i);
-    cprintf("number of active processes: %d\n",semaphores[i].m);
   }
   else
   {
-    cprintf("semaphore %d is full\n",i);
-    cprintf("waiting in list... index is %d\n",semaphores[i].last);
     semaphores[i].proc[semaphores[i].last] = myproc();
-    sleep(myproc(), &semaphores[i].lock);
     semaphores[i].last++;
+    sleep(myproc(), &semaphores[i].lock);
   }
   release(&semaphores[i].lock);
 }
@@ -943,22 +938,16 @@ semaphore_release(int i)
   acquire(&semaphores[i].lock);
   if (semaphores[i].m < semaphores[i].v && semaphores[i].m > 0)
   {
-    cprintf("semaphore %d is released\n",i);
     semaphores[i].m--;
-    cprintf("remaining empty places %d\n",semaphores[i].v-semaphores[i].m);
   }
   else if (semaphores[i].m == semaphores[i].v)
   {
     if (semaphores[i].last == 0)
     {
-      cprintf("semaphore %d is released\n",i);
       semaphores[i].m--;
-      cprintf("remaining empty places %d\n",semaphores[i].v-semaphores[i].m);
     }
     else
     {
-      cprintf("waking up process\n");
-      cprintf("removing process from waiting list\n");
       wakeup(semaphores[i].proc[0]);
       for (int j = 1; j < NPROC; j++)
         semaphores[i].proc[j-1] = semaphores[i].proc[j];
@@ -969,19 +958,25 @@ semaphore_release(int i)
 }
 
 void producer(int i){
-  for(int j = 0; j < 10; j++)
-  {
-    semaphore_acquire(i);
-    cprintf("producer writing message %d\n", j);
-    semaphore_release(i);
+  while (i<10) {
+    cprintf("produce an item %d in next produced\n",i);
+    semaphore_acquire(1);
+    semaphore_acquire(0);
+    cprintf("add next produced to the buffer\n");
+    semaphore_release(0);
+    semaphore_release(2);
+    i++;
   }
 }
 
 void consumer(int i){
-  for(int j = 0; j < 10; j++)
-  {
-    semaphore_acquire(i);
-    cprintf("consumer reading message %d\n", j);
-    semaphore_release(i);
+  while (i<10) {
+    semaphore_acquire(2);
+    semaphore_acquire(0);
+    cprintf("remove an item from buffer to next consumed\n");
+    semaphore_release(0);
+    semaphore_release(1);
+    cprintf("consume the item %d in next consumed\n",i);
+    i++;
   }
 }

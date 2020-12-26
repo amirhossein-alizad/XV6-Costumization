@@ -4,19 +4,18 @@
 // #include "defs.h"
 int main()
 {
-  semaphore_initialize(0,5,0);
+  semaphore_initialize(0,1,0); //mutex
+  semaphore_initialize(1,5,0); //empty
+  semaphore_initialize(2,5,5); //full
   int id1 = fork();
   if(id1 == 0)
   {
-    consumer(0);
+    producer(0);
   }
   else
   {
-    int id2 = fork();
-    if(id2 == 0)
-    {
-      producer(0);
-    }
+    consumer(0);
+    wait();
   }
   wait();
   exit();
