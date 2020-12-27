@@ -33,3 +33,5 @@
 #define SYS_semaphore_release 32
 #define SYS_producer 33
 #define SYS_consumer 34
+#define SYS_cv_wait 35
+#define SYS_cv_signal 36

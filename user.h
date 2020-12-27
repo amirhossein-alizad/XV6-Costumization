@@ -1,5 +1,7 @@
 struct stat;
 struct rtcdate;
+struct condvar;
+
 #include "types.h"
 // system calls
 int fork(void);
@@ -36,6 +38,8 @@ void semaphore_acquire(int);
 void semaphore_release(int);
 void producer(int);
 void consumer(int);
+void cv_wait(struct condvar*);
+void cv_signal(struct condvar*);
 
 
 // ulib.c

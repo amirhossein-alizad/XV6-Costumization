@@ -22,10 +22,8 @@ struct {
 } semaphores[5];
 
 struct {
-  int in;
-  int out;
-  char *msg[5];
-} producer_consumer_data;
+  struct spinlock lock;
+} condvar;
 
 int get_trace_state()
 {
@@ -979,4 +977,32 @@ void consumer(int i){
     cprintf("consume the item %d in next consumed\n",i);
     i++;
   }
+}
+
+void
+sleep1(void *chan)
+{
+  struct proc *p = myproc();
+
+  if(p == 0)
+    panic("sleep");
+
+  acquire(&ptable.lock);
+  
+  p->chan = chan;
+  p->state = SLEEPING;
+
+  sched();
+
+  p->chan = 0;
+
+  release(&ptable.lock);
+}
+
+void cv_wait(void* condvar) {
+  sleep1(condvar);
+}
+
+void cv_signal(void* condvar) {
+  wakeup(condvar);
 }

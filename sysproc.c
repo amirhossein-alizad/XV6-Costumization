@@ -264,3 +264,21 @@ sys_consumer(void)
       return;
   consumer(i);
 }
+
+void
+sys_cv_wait(void)
+{
+  struct condvar* condvar;
+  if (argptr(0,(void*)&condvar, sizeof(condvar))<0)
+    return;
+  cv_wait(condvar);
+}
+
+void
+sys_cv_signal(void)
+{
+  struct condvar* condvar;
+  if (argptr(0,(void*)&condvar, sizeof(condvar))<0)
+    return;
+  cv_signal(condvar);
+}

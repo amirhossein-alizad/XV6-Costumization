@@ -189,6 +189,7 @@ UPROGS=\
 	_set_bjf_process\
 	_set_bjf_system\
 	_semaphore_test\
+	_condvar_test\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -269,6 +270,7 @@ EXTRA=\
 	set_bjf_process.c\
 	set_bjf_system.c\
 	semaphore_test.c\
+	condvar_test.c\
 
 dist:
 	rm -rf dist
