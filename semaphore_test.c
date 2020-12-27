@@ -1,7 +1,7 @@
 #include "user.h"
 #include "types.h"
 #include "stat.h"
-// #include "defs.h"
+
 int main()
 {
   semaphore_initialize(0,1,0); //mutex

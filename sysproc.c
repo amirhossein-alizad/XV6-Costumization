@@ -282,3 +282,27 @@ sys_cv_signal(void)
     return;
   cv_signal(condvar);
 }
+
+void
+sys_reader(void)
+{
+  struct condvar* condvar;
+  int i;
+  if (argint(0, &i) < 0)
+    return;
+  if (argptr(1,(void*)&condvar, sizeof(condvar))<0)
+    return;
+  reader(i, condvar);
+}
+
+void
+sys_writer(void)
+{
+  struct condvar* condvar;
+  int i;
+  if (argint(0, &i) < 0)
+    return;
+  if (argptr(1,(void*)&condvar, sizeof(condvar))<0)
+    return;
+  writer(i, condvar); 
+}

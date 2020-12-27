@@ -44,6 +44,8 @@ int set_trace_state(int st)
 static struct proc *initproc;
 
 int nextpid = 1;
+int readers = 0;
+int writers = 0;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -1005,4 +1007,31 @@ void cv_wait(void* condvar) {
 
 void cv_signal(void* condvar) {
   wakeup(condvar);
+}
+
+int test_variable = 0;
+
+void reader(int i, void* condvar){
+  readers++;
+  cprintf("reader %d init\n",i);
+  if (writers)
+    cv_wait(&condvar);
+  cprintf("reader %d reads one item from buffer\n",i);
+  cprintf("number of active readers: %d\n",readers);
+  readers--;
+  cv_signal(&condvar);
+}
+
+void writer(int i, void* condvar){
+  cprintf("readers: %d\n",readers);
+  cprintf("writer %d init\n",i);
+  if (readers || writers)
+    cv_wait(&condvar);
+  writers++;
+  test_variable++;
+  cprintf("test varibale is %d\n",test_variable);
+  cprintf("writer %d writes next item in buffer\n",i);
+  cprintf("number of active writers: %d\n",writers);
+  writers--;
+  cv_signal(&condvar);
 }
