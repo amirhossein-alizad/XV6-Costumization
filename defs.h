@@ -141,6 +141,7 @@ void            cv_signal(void*);
 void            sleep1(void *chan);
 void            reader(int i, void* condvar);
 void            writer(int i, void* condvar);
+int            count_free_pages(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

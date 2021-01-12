@@ -120,6 +120,7 @@ extern int sys_cv_wait(void);
 extern int sys_cv_signal(void);
 extern int sys_reader(void);
 extern int sys_writer(void);
+extern int sys_get_free_pages_count(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]           sys_fork,
@@ -160,6 +161,7 @@ static int (*syscalls[])(void) = {
 [SYS_cv_signal] sys_cv_signal,
 [SYS_reader] sys_reader,
 [SYS_writer]sys_writer,
+[SYS_get_free_pages_count] sys_get_free_pages_count,
 };
 
 void

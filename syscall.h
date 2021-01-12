@@ -37,3 +37,4 @@
 #define SYS_cv_signal 36
 #define SYS_reader 37
 #define SYS_writer 38
+#define SYS_get_free_pages_count 39

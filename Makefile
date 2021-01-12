@@ -181,7 +181,6 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
-	_reverse\
 	_get_children\
 	_change_line\
 	_set_ticket\
@@ -190,6 +189,7 @@ UPROGS=\
 	_semaphore_test\
 	_condvar_test\
 	_readers_writers_test\
+	_get_free_pages_count\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -262,7 +262,6 @@ EXTRA=\
 	printf.c umalloc.c \
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
-	reverse.c\
 	get_children.c\
 	change_line.c\
 	set_ticket.c\
@@ -271,6 +270,7 @@ EXTRA=\
 	semaphore_test.c\
 	condvar_test.c\
 	readers_writers_test.c\
+	get_free_pages_count.c\
 
 dist:
 	rm -rf dist

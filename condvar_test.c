@@ -20,7 +20,7 @@ int main()
   }
   else if (pid == 0)
   {
-    //   sleep(100);
+      sleep(100);
       printf(1, "Child 1 Executing.\n");
       cv_signal(&condvar);
   }

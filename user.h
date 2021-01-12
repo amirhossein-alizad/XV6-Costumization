@@ -42,6 +42,7 @@ void cv_wait(struct condvar*);
 void cv_signal(struct condvar*);
 void reader(int, struct condvar*);
 void writer(int, struct condvar*);
+int get_free_pages_count(void);
 
 
 // ulib.c
